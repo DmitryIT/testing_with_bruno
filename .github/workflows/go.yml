@@ -39,6 +39,8 @@ jobs:
         chmod +x ./testing_with_bruno
         nohup ./testing_with_bruno  &
         background: true
+      env:
+        ${{ env.SERVER_PORT }}
     
     - name: Test with Bruno
       run: |
