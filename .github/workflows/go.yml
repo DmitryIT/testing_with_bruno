@@ -35,12 +35,11 @@ jobs:
 
     - name: Start Web Server
       run: |
+        env
         chmod +x ./testing_with_bruno
         nohup ./testing_with_bruno  &
         background: true
-        env:
-          SERVER_PORT: ${{ env.SERVER_PORT }}
-  
+    
     - name: Test with Bruno
       run: |
           cd test/Hello\ Server
