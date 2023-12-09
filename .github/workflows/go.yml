@@ -13,6 +13,7 @@ jobs:
 
   build:
     runs-on: ubuntu-latest
+    environment: development 
     steps:
     - uses: actions/checkout@v3
 
@@ -37,6 +38,8 @@ jobs:
         chmod +x ./testing_with_bruno
         nohup ./testing_with_bruno  &
         background: true
+        env:
+          SERVER_PORT: ${{ env.SERVER_PORT }}
   
     - name: Test with Bruno
       run: |
