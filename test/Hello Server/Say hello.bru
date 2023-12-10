@@ -11,5 +11,44 @@ get {
 }
 
 body:text {
-  Alice
+  {{name}}
+}
+
+vars:pre-request {
+  name: Bob
+}
+
+tests {
+  test("OK response", function(){
+    expect(res.getStatus()).to.equal(200);
+       });
+  
+  test("Content-Type is application/json", function() {
+    expect(res.headers['content-type']).to.include('application/json');
+  });
+  
+  test("Response structure is correct", function() {
+    expect(res.body).to.have.all.keys('time', 'greeting');
+  });
+  
+  test("Time is in correct UTC format", function() {
+    const timeRegex = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}Z$/;
+    expect(res.body.time).to.match(timeRegex);
+  });
+  
+  test("Time is current within a 5-minute buffer", function() {
+    const responseTime = new Date(res.body.time);
+    const currentTime = new Date();
+    // Difference in minutes
+    const timeDifference = Math.abs(currentTime - responseTime) / 1000 / 60; 
+    expect(timeDifference).to.be.lessThan(5);
+  });
+  
+  test("Greeting includes the correct name", function() {
+    let name = bru.getVar("name");
+    // Assuming 'expectedName' is the name you expect in the greeting
+    expect(res.body.greeting).to.equal(`Hello, ${name}!`);
+  });
+  
+  
 }
